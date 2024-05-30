@@ -71,12 +71,11 @@ class UserRepositoryImpl {
             return false;
     }
     async updateUser(id) {
-        await user_1.default.update({ linkPrecedence: 'primary' }, { where: { id: id } }).then((result) => {
-            console.log(result, 'result');
-            if (result !== null && result.length > 0)
-                return result;
-        });
-        return false;
+        let res = await user_1.default.update({ linkPrecedence: 'primary' }, { where: { id: id } });
+        if (res !== null)
+            return true;
+        else
+            return false;
     }
 }
 exports.UserRepositoryImpl = UserRepositoryImpl;

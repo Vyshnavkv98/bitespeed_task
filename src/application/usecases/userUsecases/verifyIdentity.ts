@@ -1,6 +1,4 @@
-import { error } from "console";
-import { UserAttributes } from "../../../domain/interface/IUser";
-import User from "../../../domain/models/user";
+
 import { UserRepositoryImpl } from "../../../infrastructure/dataAccess/userRepositoryImpl";
 import { getAllIdentity } from "../../../interfaces/utility/getAllIdentityResponse";
 
@@ -11,11 +9,13 @@ export const verifyIdentity = async (email: string, phoneNumber: string) => {
   const phoneExist = await userRepositoryImpl.isExistPhoneNumber(phoneNumber)
 
 
-  if (Array.isArray(emailExist) == false && Array.isArray(phoneExist) == false) {
+  if (Array.isArray(emailExist) == false&&email!==null&& phoneNumber!==null && Array.isArray(phoneExist) == false) {
    
       const response = await userRepositoryImpl.createNewUser(email, phoneNumber, 'primary')
       if (response) {
-        return response
+        let emailData= await userRepositoryImpl.isExistEmail(email)
+        let res=getAllIdentity(emailData,false)
+        return res
       } else {
         throw new Error('failed to create new identity')
       }
@@ -23,11 +23,13 @@ export const verifyIdentity = async (email: string, phoneNumber: string) => {
   }
 
   else if (Array.isArray(emailExist) == true && Array.isArray(phoneExist) == false) {
-    console.log(Array.isArray(emailExist) == true , phoneExist, 'ffffffffffffffiiiiiiiiiiiirrrrrrrrst');
     if(phoneNumber!==null){
     const response = await userRepositoryImpl.createNewUser(email, phoneNumber, 'secondary')
     if (response) {
-      return response
+      const emailData = await userRepositoryImpl.isExistEmail(email)
+    const phoneData = await userRepositoryImpl.isExistPhoneNumber(phoneNumber)
+   const res= getAllIdentity(emailData,phoneData)
+   return res
     } else {
       throw new Error('failed to create new identity')
     }
@@ -35,18 +37,28 @@ export const verifyIdentity = async (email: string, phoneNumber: string) => {
     const emailData = await userRepositoryImpl.isExistEmail(email)
     const phoneData = await userRepositoryImpl.isExistPhoneNumber(phoneNumber)
    const res= getAllIdentity(emailData,phoneData)
-   console.log(res,'rrrrrrrreeeeeeeeeedddddddssssssssssss');
+   return res
    
   }
   }
   else if (Array.isArray(emailExist) == false && Array.isArray(phoneExist) == true) {
     console.log(Array.isArray(emailExist) == false && Array.isArray(phoneExist) == true, 'seccccccccccccccccccccccccc');
-
-    const response = await userRepositoryImpl.createNewUser(email, phoneNumber, 'secondary')
-    if (response) {
-      return response
-    } else {
-      throw new Error('failed to create new identity')
+    if(email!==null){
+      const response = await userRepositoryImpl.createNewUser(email, phoneNumber, 'secondary')
+      if (response) {
+        const emailData = await userRepositoryImpl.isExistEmail(email)
+      const phoneData = await userRepositoryImpl.isExistPhoneNumber(phoneNumber)
+     const res= getAllIdentity(emailData,phoneData)
+     return res
+      } else {
+        throw new Error('failed to create new identity')
+      }
+    }else{
+      const emailData = await userRepositoryImpl.isExistEmail(email)
+      const phoneData = await userRepositoryImpl.isExistPhoneNumber(phoneNumber)
+     const res= getAllIdentity(emailData,phoneData)
+     return res
+     
     }
   }
   else if (Array.isArray(emailExist) == true && Array.isArray(phoneExist) == true) {
@@ -76,12 +88,20 @@ console.log(JSON.stringify(emailExist));
 
 
     const response = await userRepositoryImpl.updateUser(id!)
+console.log(response);
 
-  
-    console.log('Oldest date:', oldestDate);
-    console.log('id:', id);
+    if (response) {
+      const emailData = await userRepositoryImpl.isExistEmail(email)
+    const phoneData = await userRepositoryImpl.isExistPhoneNumber(phoneNumber)
+   const res= getAllIdentity(emailData,phoneData)
+   return res
+    } else {
+      throw new Error('failed to create new identity')
+    }
 
 
+  }else{
+    throw new Error('please fill the fields')
   }
 
 

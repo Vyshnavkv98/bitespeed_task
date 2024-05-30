@@ -72,11 +72,8 @@ export class UserRepositoryImpl implements IUserRepository {
   }
 
   public async updateUser(id:number): Promise<boolean | UserAttributes[]>{
-    await User.update({linkPrecedence:'primary'},{ where: { id:id } }).then((result) => {
-   console.log(result,'result');
-   
-      if (result !== null && result.length > 0) return result
-    })
-    return false
+    let res=await User.update({linkPrecedence:'primary'},{ where: { id:id } })
+    if(res!==null)return true
+    else return false
   }
 }

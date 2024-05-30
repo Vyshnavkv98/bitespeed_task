@@ -11,7 +11,9 @@ export class UserController {
 
       const response = await verifyIdentity(email, phoneNumber);
       if (response) {
-        res.status(201).send({ message: 'Registration success' });
+console.log(response,'response');
+
+        res.status(200).send(response);
       } else {
         res.status(404).send({ message: 'Something went wrong!!' });
       }
