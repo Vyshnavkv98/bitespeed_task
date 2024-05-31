@@ -42,7 +42,7 @@ export const verifyIdentity = async (email: string, phoneNumber: string) => {
   }
   }
   else if (Array.isArray(emailExist) == false && Array.isArray(phoneExist) == true) {
-    console.log(Array.isArray(emailExist) == false && Array.isArray(phoneExist) == true, 'seccccccccccccccccccccccccc');
+    console.log(Array.isArray(emailExist) == false && Array.isArray(phoneExist) == true);
     if(email!==null){
       const response = await userRepositoryImpl.createNewUser(email, phoneNumber, 'secondary')
       if (response) {
@@ -66,7 +66,7 @@ export const verifyIdentity = async (email: string, phoneNumber: string) => {
     let id = null;
     let oldestDate = new Date();
 
-// console.log(emailExist,'emailexist');
+
 console.log(JSON.stringify(emailExist));
 
     JSON.parse(JSON.stringify(emailExist)).forEach((identity:any) => {
